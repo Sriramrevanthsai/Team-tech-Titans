@@ -1,0 +1,135 @@
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#define MAX 100
+
+typedef struct {
+    int course_id;
+    char course_code[10];
+    char course_name[50];
+    char course_description[100];
+    float course_credits;
+} Course;
+
+Course courses[MAX];
+int course_count = 0;
+
+void create_course_AP23110011142();
+void retrieve_courses_AP23110011112();
+void bubble_sort_courses_AP23110011110();
+void selection_sort_courses_AP23110011079();
+void compare_sorting_algorithms_AP23110010716();
+
+int main() {
+    int choice;
+    while (1) {
+        printf("\n1. Create Course\n2. Retrieve Courses\n3. Bubble Sort\n4. Selection Sort\n5. Compare Sorting\n6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar();  // Clear newline character left by scanf
+        switch (choice) {
+            case 1: create_course_AP23110011142(); break;
+            case 2: retrieve_courses_AP23110011112(); break;
+            case 3: bubble_sort_courses_AP23110011110(); break;
+            case 4: selection_sort_courses_AP23110011079(); break;
+            case 5: compare_sorting_algorithms_AP23110010716(); break;
+            case 6: return 0;
+            default: printf("Invalid choice!\n");
+        }
+    }
+    return 0;
+}
+
+void create_course_AP23110011142() {
+    if (course_count >= MAX) {
+        printf("Course list is full!\n");
+        return;
+    }
+    
+    Course c;
+    printf("Enter Course ID: ");
+    scanf("%d", &c.course_id);
+    getchar();  // Clear the newline character left by scanf
+
+    printf("Enter Course Code: ");
+    fgets(c.course_code, sizeof(c.course_code), stdin);
+    c.course_code[strcspn(c.course_code, "\n")] = '\0';  // Remove trailing newline
+
+    printf("Enter Course Name: ");
+    fgets(c.course_name, sizeof(c.course_name), stdin);
+    c.course_name[strcspn(c.course_name, "\n")] = '\0';  // Remove trailing newline
+
+    printf("Enter Course Description: ");
+    fgets(c.course_description, sizeof(c.course_description), stdin);
+    c.course_description[strcspn(c.course_description, "\n")] = '\0';  // Remove trailing newline
+
+    printf("Enter Course Credits: ");
+    scanf("%f", &c.course_credits);
+    getchar();  // Clear the newline character left by scanf
+
+    // Store the course in the array
+    courses[course_count++] = c;
+    printf("Course added successfully!\n");
+}
+
+void retrieve_courses_AP23110011112() {
+    if (course_count == 0) {
+        printf("No courses available.\n");
+        return;
+    }
+
+    printf("\nCourse List:\n");
+    for (int i = 0; i < course_count; i++) {
+        printf("ID: %d, Code: %s, Name: %s, Description: %s, Credits: %.2f\n",
+               courses[i].course_id, courses[i].course_code,
+               courses[i].course_name, courses[i].course_description, 
+               courses[i].course_credits);
+    }
+}
+
+void bubble_sort_courses_AP23110011110() {
+    for (int i = 0; i < course_count - 1; i++) {
+        for (int j = 0; j < course_count - i - 1; j++) {
+            if (strcmp(courses[j].course_code, courses[j + 1].course_code) > 0) {
+                Course temp = courses[j];
+                courses[j] = courses[j + 1];
+                courses[j + 1] = temp;
+            }
+        }
+    }
+    printf("Courses sorted using Bubble Sort!\n");
+    retrieve_courses_AP23110011112();
+}
+
+void selection_sort_courses_AP23110011079() {
+    for (int i = 0; i < course_count - 1; i++) {
+        int min_idx = i;
+        for (int j = i + 1; j < course_count; j++) {
+            if (strcmp(courses[j].course_code, courses[min_idx].course_code) < 0) {
+                min_idx = j;
+            }
+        }
+        Course temp = courses[min_idx];
+        courses[min_idx] = courses[i];
+        courses[i] = temp;
+    }
+    printf("Courses sorted using Selection Sort!\n");
+    retrieve_courses_AP23110011112();
+}
+
+void compare_sorting_algorithms_AP23110010716() {
+    clock_t start, end;
+
+    start = clock();
+    bubble_sort_courses_AP23110011110();
+    end = clock();
+    printf("Bubble Sort Time: %lf seconds\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    start = clock();
+    selection_sort_courses_AP23110011079();
+    end = clock();
+    printf("Selection Sort Time: %lf seconds\n", (double)(end - start) / CLOCKS_PER_SEC);
+
+    printf("Comparison performed by AP23110011106.\n");
+}
